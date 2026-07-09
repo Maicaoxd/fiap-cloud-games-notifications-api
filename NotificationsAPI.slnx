@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/k8s/" />
+  <Folder Name="/src/">
+    <Project Path="src/NotificationsAPI/NotificationsAPI.csproj" Id="d104f7de-51de-4a3c-ab59-476e072daf9c" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NotificationsAPI.Tests/NotificationsAPI.Tests.csproj" Id="8ccd3392-1a02-44e0-9323-1748a3189275" />
+  </Folder>
+</Solution>
