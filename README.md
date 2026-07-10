@@ -212,7 +212,7 @@ Os testes atuais cobrem:
 Build da imagem:
 
 ```powershell
-docker build -t fiap-cloud-games-notifications-api:latest .
+docker build -t maicaoxd/fiap-cloud-games-notifications-api:0.1.1 .
 ```
 
 Executar a imagem apontando para um RabbitMQ rodando no host:
@@ -224,7 +224,7 @@ docker run --rm -p 8083:8080 `
   -e RabbitMq__VirtualHost=/ `
   -e RabbitMq__Username=guest `
   -e RabbitMq__Password=guest `
-  fiap-cloud-games-notifications-api:latest
+  maicaoxd/fiap-cloud-games-notifications-api:0.1.1
 ```
 
 Acessar:
@@ -236,20 +236,20 @@ http://localhost:8083/health
 
 ## Kubernetes
 
-Este microsservico deve ter manifests em `k8s/` com:
+Este microsservico tem manifests em `k8s/` com:
 
 - `Deployment`
 - `Service`
 - `ConfigMap`
 - `Secret`
 
-Comandos esperados quando os manifests forem adicionados:
+Aplicar manifests deste servico:
 
 ```powershell
-kubectl apply -f .\k8s
-kubectl get pods
-kubectl get services
-kubectl logs deployment/notifications-api
+kubectl apply -k .\k8s
+kubectl get pods -n fiap-cloud-games
+kubectl get services -n fiap-cloud-games
+kubectl logs deployment/notifications-api -n fiap-cloud-games
 ```
 
 No cluster, configure `RabbitMq__Host` com o nome do Service do RabbitMQ, por exemplo `rabbitmq`, e mantenha os dados sensiveis em `Secret`.
