@@ -8,8 +8,8 @@ Este repositorio faz parte da Fase 2 do Tech Challenge e representa o microsserv
 
 - Consumir `UserCreatedEvent` publicado pela UsersAPI.
 - Simular e-mail de boas-vindas para novos usuarios.
-- Futuramente consumir `PaymentProcessedEvent` publicado pela PaymentsAPI.
-- Futuramente simular e-mail de confirmacao de compra quando o pagamento for aprovado.
+- Consumir `PaymentProcessedEvent` publicado pela PaymentsAPI.
+- Simular e-mail de confirmacao de compra quando o pagamento for aprovado.
 - Expor endpoints de health para validacao local, Docker e Kubernetes.
 
 ## Tecnologias
@@ -117,7 +117,7 @@ A NotificationsAPI nao possui endpoints de negocio neste momento, porque seu tra
 http://localhost:5007/swagger
 ```
 
-## Evento consumido
+## Eventos consumidos
 
 ### `UserCreatedEvent`
 
@@ -132,7 +132,32 @@ Publicado pela UsersAPI apos o cadastro de usuario.
 }
 ```
 
-Quando o evento chega, o consumer `UserCreatedEventConsumer` registra no console uma mensagem simulando envio de e-mail de boas-vindas.
+Quando o evento chega, o consumer UserCreatedEventConsumer registra no console uma mensagem simulando envio de e-mail de boas-vindas.
+### `PaymentProcessedEvent`
+
+Publicado pela PaymentsAPI apos o processamento do pagamento de um pedido.
+
+```json
+{
+  "orderId": "guid",
+  "userId": "guid",
+  "games": [
+    {
+      "gameId": "guid",
+      "price": 49.90
+    },
+    {
+      "gameId": "guid",
+      "price": 24.90
+    }
+  ],
+  "totalPrice": 74.80,
+  "status": "Approved",
+  "processedAt": "datetime"
+}
+```
+
+Quando o status e `Approved`, o consumer `PaymentProcessedEventConsumer` registra no console uma mensagem simulando envio de e-mail de confirmacao de compra. Quando o status e `Rejected`, nenhuma confirmacao de compra e enviada.
 
 ## Validar o fluxo com UsersAPI
 
@@ -164,6 +189,7 @@ dotnet test NotificationsAPI.slnx -m:1
 Os testes atuais cobrem:
 
 - consumo/log do `UserCreatedEvent`;
+- consumo/log do `PaymentProcessedEvent` aprovado e rejeitado;
 - defaults de `RabbitMqOptions`;
 - checagem de conexao TCP usada pelo health readiness.
 
@@ -237,4 +263,5 @@ Isso e normal quando o consumer esta funcionando. O RabbitMQ entrega a mensagem 
 ### Erro de porta ocupada ao subir RabbitMQ
 
 Voce provavelmente ja tem outro RabbitMQ usando `5672` ou `15672`. Pare um deles ou use apenas o broker do repositorio UsersAPI durante os testes integrados.
+
 

@@ -45,6 +45,7 @@ namespace NotificationsAPI.Extensions
             {
                 x.SetKebabCaseEndpointNameFormatter();
                 x.AddConsumer<UserCreatedEventConsumer>();
+                x.AddConsumer<PaymentProcessedEventConsumer>();
 
                 x.UsingRabbitMq((context, cfg) =>
                 {
@@ -69,3 +70,4 @@ namespace NotificationsAPI.Extensions
         }
     }
 }
+
