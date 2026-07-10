@@ -44,8 +44,10 @@ namespace NotificationsAPI.Extensions
             services.AddMassTransit(x =>
             {
                 x.SetKebabCaseEndpointNameFormatter();
-                x.AddConsumer<UserCreatedEventConsumer>();
-                x.AddConsumer<PaymentProcessedEventConsumer>();
+                x.AddConsumer<UserCreatedEventConsumer>()
+                    .Endpoint(endpoint => endpoint.Name = "notifications-user-created-event");
+                x.AddConsumer<PaymentProcessedEventConsumer>()
+                    .Endpoint(endpoint => endpoint.Name = "notifications-payment-processed-event");
 
                 x.UsingRabbitMq((context, cfg) =>
                 {

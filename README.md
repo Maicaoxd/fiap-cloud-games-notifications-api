@@ -121,6 +121,12 @@ http://localhost:5007/swagger
 
 ### `UserCreatedEvent`
 
+Fila dedicada no RabbitMQ:
+
+```text
+notifications-user-created-event
+```
+
 Publicado pela UsersAPI apos o cadastro de usuario.
 
 ```json
@@ -134,6 +140,14 @@ Publicado pela UsersAPI apos o cadastro de usuario.
 
 Quando o evento chega, o consumer UserCreatedEventConsumer registra no console uma mensagem simulando envio de e-mail de boas-vindas.
 ### `PaymentProcessedEvent`
+
+Fila dedicada no RabbitMQ:
+
+```text
+notifications-payment-processed-event
+```
+
+Essa fila e exclusiva da NotificationsAPI. A CatalogAPI tambem consome `PaymentProcessedEvent`, mas usa outra fila para garantir o comportamento publish/subscribe em vez de competir pela mesma mensagem.
 
 Publicado pela PaymentsAPI apos o processamento do pagamento de um pedido.
 
@@ -259,6 +273,8 @@ Isso e normal quando o consumer esta funcionando. O RabbitMQ entrega a mensagem 
 - aba `Queues and Streams` no RabbitMQ Management;
 - contadores `Ready`, `Unacked`, `Ack` e `Deliver/get`;
 - logs da NotificationsAPI.
+
+Se existir uma fila antiga chamada `payment-processed-event`, ela pode ser sobra de uma configuracao anterior em que CatalogAPI e NotificationsAPI disputavam a mesma fila. Apague essa fila no RabbitMQ Management ou recrie o ambiente para que fiquem apenas as filas dedicadas atuais.
 
 ### Erro de porta ocupada ao subir RabbitMQ
 
