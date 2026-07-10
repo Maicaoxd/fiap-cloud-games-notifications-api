@@ -1,5 +1,4 @@
 <Solution>
-  <Folder Name="/k8s/" />
   <Folder Name="/src/">
     <Project Path="src/NotificationsAPI/NotificationsAPI.csproj" Id="d104f7de-51de-4a3c-ab59-476e072daf9c" />
   </Folder>
