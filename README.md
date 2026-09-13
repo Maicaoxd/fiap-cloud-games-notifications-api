@@ -2,7 +2,7 @@
 
 Microsservico responsavel por consumir eventos da plataforma FIAP Cloud Games e simular o envio de notificacoes por e-mail escrevendo logs no console.
 
-Este repositorio faz parte da Fase 2 do Tech Challenge e representa o microsservico independente de notificacoes.
+Na orquestração Docker, este serviço está disponível no perfil opcional legacy-notifications; a Function é o consumidor padrão. A base Kubernetes executa NotificationsAPI. Não execute os dois consumidores nas mesmas filas.
 
 ## Responsabilidades
 
@@ -37,6 +37,11 @@ tests/NotificationsAPI.Tests/
   Health/          Testes dos health checkers.
   Options/         Testes das options.
 ```
+
+## Requisitos
+
+- .NET 10 SDK.
+- Docker Desktop para executar o RabbitMQ local ou um broker já disponível.
 
 ## Variaveis de ambiente
 
@@ -111,7 +116,7 @@ O endpoint `/health` e o `/health/ready` tentam abrir conexao TCP com o RabbitMQ
 
 ## Swagger
 
-A NotificationsAPI nao possui endpoints de negocio neste momento, porque seu trabalho principal e consumir eventos do RabbitMQ. Mesmo assim, o Swagger esta habilitado para expor os endpoints operacionais, como health checks.
+A NotificationsAPI nao possui endpoints de negocio porque seu trabalho principal e consumir eventos do RabbitMQ. Mesmo assim, o Swagger esta habilitado para expor os endpoints operacionais, como health checks.
 
 ```text
 http://localhost:5007/swagger
@@ -190,7 +195,7 @@ dotnet run --project src\NotificationsAPI\NotificationsAPI.csproj
 E-mail de boas-vindas enviado para Nome (email@dominio.com). UserId: <guid>
 ```
 
-No RabbitMQ Management, a fila criada pelo consumer costuma aparecer com nome baseado no consumer, por exemplo `user-created-event` ou `user-created-event-consumer`, dependendo da topologia configurada pelo MassTransit.
+No RabbitMQ Management, consulte a fila notifications-user-created-event e acompanhe os contadores de entrega e confirmação.
 
 ## Testes
 
@@ -274,10 +279,8 @@ Isso e normal quando o consumer esta funcionando. O RabbitMQ entrega a mensagem 
 - contadores `Ready`, `Unacked`, `Ack` e `Deliver/get`;
 - logs da NotificationsAPI.
 
-Se existir uma fila antiga chamada `payment-processed-event`, ela pode ser sobra de uma configuracao anterior em que CatalogAPI e NotificationsAPI disputavam a mesma fila. Apague essa fila no RabbitMQ Management ou recrie o ambiente para que fiquem apenas as filas dedicadas atuais.
+Não remova filas para corrigir ausência de logs. Confira o nome configurado, os bindings e os consumidores ativos; mensagens podem ser entregues a outro consumidor da mesma fila.
 
 ### Erro de porta ocupada ao subir RabbitMQ
 
 Voce provavelmente ja tem outro RabbitMQ usando `5672` ou `15672`. Pare um deles ou use apenas o broker do repositorio UsersAPI durante os testes integrados.
-
-

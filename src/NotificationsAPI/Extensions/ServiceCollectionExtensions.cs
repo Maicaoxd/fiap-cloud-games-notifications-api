@@ -32,11 +32,11 @@ namespace NotificationsAPI.Extensions
             services
                 .AddOptions<RabbitMqOptions>()
                 .Bind(configuration.GetSection(RabbitMqOptions.SectionName))
-                .Validate(options => !string.IsNullOrWhiteSpace(options.Host), "RabbitMq:Host is required.")
-                .Validate(options => options.Port is > 0 and <= 65535, "RabbitMq:Port must be between 1 and 65535.")
-                .Validate(options => !string.IsNullOrWhiteSpace(options.VirtualHost), "RabbitMq:VirtualHost is required.")
-                .Validate(options => !string.IsNullOrWhiteSpace(options.Username), "RabbitMq:Username is required.")
-                .Validate(options => !string.IsNullOrWhiteSpace(options.Password), "RabbitMq:Password is required.")
+                .Validate(options => !string.IsNullOrWhiteSpace(options.Host), "RabbitMq:Host é obrigatório.")
+                .Validate(options => options.Port is > 0 and <= 65535, "RabbitMq:Port deve estar entre 1 e 65535.")
+                .Validate(options => !string.IsNullOrWhiteSpace(options.VirtualHost), "RabbitMq:VirtualHost é obrigatório.")
+                .Validate(options => !string.IsNullOrWhiteSpace(options.Username), "RabbitMq:Username é obrigatório.")
+                .Validate(options => !string.IsNullOrWhiteSpace(options.Password), "RabbitMq:Password é obrigatório.")
                 .ValidateOnStart();
 
             services.AddSingleton<IRabbitMqConnectionChecker, RabbitMqConnectionChecker>();
@@ -72,4 +72,3 @@ namespace NotificationsAPI.Extensions
         }
     }
 }
-
