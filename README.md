@@ -2,7 +2,7 @@
 
 Microsservico responsavel por consumir eventos da plataforma FIAP Cloud Games e simular o envio de notificacoes por e-mail escrevendo logs no console.
 
-Na orquestração Docker, este serviço está disponível no perfil opcional legacy-notifications; a Function é o consumidor padrão. A base Kubernetes executa NotificationsAPI. Não execute os dois consumidores nas mesmas filas.
+Na orquestração Docker, este serviço está disponível no perfil opcional legacy-notifications. No Kubernetes, seus manifestos são opcionais em k8s/notifications-api da orquestração. A base padrão Docker e Kubernetes executa Notifications Function. Pare a Function antes de usar esta API no mesmo broker; os consumidores não devem disputar as mesmas filas.
 
 ## Responsabilidades
 
