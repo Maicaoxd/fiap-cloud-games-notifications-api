@@ -217,7 +217,7 @@ Os testes atuais cobrem:
 Build da imagem:
 
 ```powershell
-docker build -t maicaoxd/fiap-cloud-games-notifications-api:0.1.1 .
+docker build -t maicaoxd/fiap-cloud-games-notifications-api:0.1.2 .
 ```
 
 Executar a imagem apontando para um RabbitMQ rodando no host:
@@ -229,7 +229,7 @@ docker run --rm -p 8083:8080 `
   -e RabbitMq__VirtualHost=/ `
   -e RabbitMq__Username=guest `
   -e RabbitMq__Password=guest `
-  maicaoxd/fiap-cloud-games-notifications-api:0.1.1
+  maicaoxd/fiap-cloud-games-notifications-api:0.1.2
 ```
 
 Acessar:
