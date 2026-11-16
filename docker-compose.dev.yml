@@ -1,4 +1,4 @@
-﻿services:
+services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: fcg-notifications-rabbitmq
@@ -6,5 +6,5 @@
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_USER: "${FCG_RABBITMQ_USERNAME:?Defina FCG_RABBITMQ_USERNAME no arquivo .env}"
+      RABBITMQ_DEFAULT_PASS: "${FCG_RABBITMQ_PASSWORD:?Defina FCG_RABBITMQ_PASSWORD no arquivo .env}"

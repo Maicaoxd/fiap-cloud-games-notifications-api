@@ -1,4 +1,4 @@
-﻿# FIAP Cloud Games - NotificationsAPI
+# FIAP Cloud Games - NotificationsAPI
 
 Microsservico responsavel por consumir eventos da plataforma FIAP Cloud Games e simular o envio de notificacoes por e-mail escrevendo logs no console.
 
@@ -43,6 +43,12 @@ tests/NotificationsAPI.Tests/
 - .NET 10 SDK.
 - Docker Desktop para executar o RabbitMQ local ou um broker já disponível.
 
+## Configuração local
+
+Em um checkout novo, copie `.env.example` para `.env` e preencha os valores usados pelo Compose. Para executar com `dotnet run`, copie `src/NotificationsAPI/appsettings.json` para `src/NotificationsAPI/appsettings.Development.json` e configure as conexões e credenciais nesse arquivo privado. Variáveis de ambiente também podem fornecer os valores. Os arquivos locais são ignorados pelo Git e pelo build Docker.
+
+Para Kubernetes local, copie `k8s/local-secrets.example.yaml` para `k8s/local-secrets.yaml` e preencha os valores antes de aplicar os manifestos.
+
 ## Variaveis de ambiente
 
 | Variavel | Finalidade | Padrao local |
@@ -50,25 +56,10 @@ tests/NotificationsAPI.Tests/
 | `RabbitMq__Host` | Host do RabbitMQ usado pelo MassTransit. | `localhost` |
 | `RabbitMq__Port` | Porta TCP usada pelo MassTransit e pelo health check do RabbitMQ. | `5672` |
 | `RabbitMq__VirtualHost` | Virtual host do RabbitMQ. | `/` |
-| `RabbitMq__Username` | Usuario do RabbitMQ. | `guest` |
-| `RabbitMq__Password` | Senha do RabbitMQ. | `guest` |
+| `RabbitMq__Username` | Usuario do RabbitMQ. | Configurar externamente |
+| `RabbitMq__Password` | Senha do RabbitMQ. | Configurar externamente |
 | `ASPNETCORE_ENVIRONMENT` | Ambiente de execucao da API. | `Development` |
 
-Configuracao local padrao em `src/NotificationsAPI/appsettings.json`:
-
-```json
-{
-  "RabbitMq": {
-    "Host": "localhost",
-    "Port": 5672,
-    "VirtualHost": "/",
-    "Username": "guest",
-    "Password": "guest"
-  }
-}
-```
-
-Observacao: os segredos deste repositorio sao apenas para desenvolvimento local academico.
 
 ## Subir dependencia local
 
@@ -90,8 +81,8 @@ RabbitMQ Management:
 
 ```text
 http://localhost:15672
-usuario: guest
-senha: guest
+usuario: valor de FCG_RABBITMQ_USERNAME
+senha: valor de FCG_RABBITMQ_PASSWORD
 ```
 
 Se voce ja estiver usando o RabbitMQ do repositorio UsersAPI na porta `5672`, nao suba outro RabbitMQ ao mesmo tempo. Nesse caso, deixe apenas um broker rodando e a NotificationsAPI vai consumir dele.
@@ -227,8 +218,8 @@ docker run --rm -p 8083:8080 `
   -e RabbitMq__Host=host.docker.internal `
   -e RabbitMq__Port=5672 `
   -e RabbitMq__VirtualHost=/ `
-  -e RabbitMq__Username=guest `
-  -e RabbitMq__Password=guest `
+  -e RabbitMq__Username="$env:RabbitMq__Username" `
+  -e RabbitMq__Password="$env:RabbitMq__Password" `
   maicaoxd/fiap-cloud-games-notifications-api:0.1.2
 ```
 
