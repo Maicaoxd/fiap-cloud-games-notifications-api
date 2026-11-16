@@ -275,3 +275,9 @@ Não remova filas para corrigir ausência de logs. Confira o nome configurado, o
 ### Erro de porta ocupada ao subir RabbitMQ
 
 Voce provavelmente ja tem outro RabbitMQ usando `5672` ou `15672`. Pare um deles ou use apenas o broker do repositorio UsersAPI durante os testes integrados.
+
+## CI/CD
+
+Pushes para master executam testes e publicam a imagem no ACR. O deploy da implementação legada é manual: em Actions > CI/CD > Run workflow, selecione master e marque deploy, com a Notifications Function parada. Pull requests executam testes e build sem publicar.
+
+As imagens recebem tags por commit e execução. Para acrescentar uma versão como v1.2.3, preencha version na execução manual pela master. O deploy no AKS usa o digest da imagem. Configure as variáveis Azure e a credencial federada deste repositório conforme o [guia da orquestração](https://github.com/Maicaoxd/fiap-cloud-games-orchestration/blob/master/k8s/azure/README.md#github-actions).
